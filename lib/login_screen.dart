@@ -1,0 +1,307 @@
+import 'package:flutter/material.dart';
+
+// ─────────────────────────────────────────────
+//  LoginScreen
+//  This screen lets the user enter their email
+//  and password to sign in.
+// ─────────────────────────────────────────────
+
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  // These controllers read whatever the user types
+  // inside each text field.
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  // This controls whether the password is hidden or visible.
+  bool _passwordVisible = false;
+
+  // ── App Colors (defined once, used everywhere) ──
+  static const Color navy = Color(0xFF1A1A2E);
+  static const Color red = Color(0xFFC8553D);
+  static const Color cream = Color(0xFFFAF7F2);
+  static const Color surface = Color(0xFFF0EBE3);
+
+  // ── Sign In button logic ──
+  void _onSignIn() {
+    // TODO: Replace this with your real login logic later.
+    // For now, we just print what the user typed.
+    String email = _emailController.text;
+    String password = _passwordController.text;
+
+    print('Email: $email');
+    print('Password: $password');
+
+    // Example: navigate to the Home screen after login
+    // Navigator.pushReplacement(
+    //   context,
+    //   MaterialPageRoute(builder: (context) => const HomeScreen()),
+    // );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: cream,
+
+      // SingleChildScrollView lets the screen scroll
+      // if the keyboard pushes content up.
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 28),
+          child: Column(
+            crossAxisAlignment:
+                CrossAxisAlignment.start, // align text to the left
+            children: [
+              const SizedBox(height: 80),
+
+              // ── Greeting ──
+              const Text(
+                'Welcome back 👋',
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.w900,
+                  color: navy,
+                ),
+              ),
+
+              const SizedBox(height: 8),
+
+              const Text(
+                'Sign in to continue shopping',
+                style: TextStyle(fontSize: 15, color: Colors.grey),
+              ),
+
+              const SizedBox(height: 40),
+
+              // ── Email Field ──
+              const Text(
+                'Email',
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: navy,
+                ),
+              ),
+
+              const SizedBox(height: 8),
+
+              TextField(
+                controller: _emailController,
+                keyboardType:
+                    TextInputType.emailAddress, // shows email keyboard
+                decoration: InputDecoration(
+                  hintText: 'you@email.com',
+                  hintStyle: const TextStyle(color: Colors.grey),
+                  filled: true,
+                  fillColor: surface,
+                  prefixIcon: const Icon(
+                    Icons.email_outlined,
+                    color: Colors.grey,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(14),
+                    borderSide: BorderSide.none, // no visible border line
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              // ── Password Field ──
+              const Text(
+                'Password',
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: navy,
+                ),
+              ),
+
+              const SizedBox(height: 8),
+
+              TextField(
+                controller: _passwordController,
+                obscureText: !_passwordVisible, // hides or shows the password
+                decoration: InputDecoration(
+                  hintText: '••••••••',
+                  hintStyle: const TextStyle(color: Colors.grey),
+                  filled: true,
+                  fillColor: surface,
+                  prefixIcon: const Icon(
+                    Icons.lock_outline,
+                    color: Colors.grey,
+                  ),
+                  // Eye icon to toggle password visibility
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _passwordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                      color: Colors.grey,
+                    ),
+                    onPressed: () {
+                      // setState() rebuilds the screen with the new value
+                      setState(() {
+                        _passwordVisible = !_passwordVisible;
+                      });
+                    },
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(14),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 10),
+
+              // ── Forgot Password ──
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () {
+                    // TODO: navigate to Forgot Password screen
+                  },
+                  child: const Text(
+                    'Forgot password?',
+                    style: TextStyle(color: red),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 24),
+
+              // ── Sign In Button ──
+              SizedBox(
+                width: double.infinity, // makes the button full width
+                height: 54,
+                child: ElevatedButton(
+                  onPressed: _onSignIn,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: red,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                  child: const Text(
+                    'Sign In',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 28),
+
+              // ── Divider with "or" ──
+              const Row(
+                children: [
+                  Expanded(child: Divider(color: Colors.grey)),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 12),
+                    child: Text('or', style: TextStyle(color: Colors.grey)),
+                  ),
+                  Expanded(child: Divider(color: Colors.grey)),
+                ],
+              ),
+
+              const SizedBox(height: 24),
+
+              // ── Social Login Buttons ──
+              Row(
+                children: [
+                  // Google Button
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: () {
+                        // TODO: add Google sign-in
+                      },
+                      icon: const Text(
+                        'G',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w900,
+                          color: red,
+                        ),
+                      ),
+                      label: const Text(
+                        'Google',
+                        style: TextStyle(color: navy),
+                      ),
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        side: const BorderSide(color: Colors.grey),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(width: 12),
+
+                  // Facebook Button
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: () {
+                        // TODO: add Facebook sign-in
+                      },
+                      icon: const Text(
+                        'f',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w900,
+                          color: Color(0xFF1877F2),
+                        ),
+                      ),
+                      label: const Text(
+                        'Facebook',
+                        style: TextStyle(color: navy),
+                      ),
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        side: const BorderSide(color: Colors.grey),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 32),
+
+              // ── Sign Up Link ──
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    "Don't have an account? ",
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      // TODO: navigate to Sign Up screen
+                    },
+                    child: const Text(
+                      'Sign Up',
+                      style: TextStyle(color: red, fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 40),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
