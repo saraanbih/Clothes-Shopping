@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
 
+      // if u wanna test product screen, just change the home to ProductScreen and import it at the top
       home: const SplashScreen(),
     );
   }
