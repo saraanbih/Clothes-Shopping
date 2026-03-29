@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'login_screen.dart';
 
-// ─────────────────────────────────────────────
 //  SplashScreen
-//  This is the first screen users see when they
 //  open the app. After 3 seconds, it automatically
-//  moves to the Login screen.
-// ─────────────────────────────────────────────
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -52,7 +48,7 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment:
               MainAxisAlignment.center, // center everything vertically
           children: [
-            // ── App Icon ──
+            // App Icon
             Container(
               width: 100,
               height: 100,
@@ -64,7 +60,7 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
 
             const SizedBox(height: 24), // spacing
-            // ── App Name ──
+            // App Name
             const Text(
               'DRAPE',
               style: TextStyle(
@@ -77,7 +73,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
             const SizedBox(height: 10),
 
-            // ── Tagline ──
+            // Tagline
             const Text(
               'YOUR STYLE, YOUR WAY',
               style: TextStyle(
@@ -89,7 +85,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
             const SizedBox(height: 60),
 
-            // ── Loading Spinner ──
+            // Loading Spinner
             // Shows the user something is happening
             const CircularProgressIndicator(
               color: Color(0xFFC8553D),

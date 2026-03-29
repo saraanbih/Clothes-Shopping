@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
+import 'home_screen.dart'; // import so we can navigate to it after login
 
-// ─────────────────────────────────────────────
 //  LoginScreen
-//  This screen lets the user enter their email
-//  and password to sign in.
-// ─────────────────────────────────────────────
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -22,27 +19,21 @@ class _LoginScreenState extends State<LoginScreen> {
   // This controls whether the password is hidden or visible.
   bool _passwordVisible = false;
 
-  // ── App Colors (defined once, used everywhere) ──
+  // App Colors (defined once, used everywhere) ──
   static const Color navy = Color(0xFF1A1A2E);
   static const Color red = Color(0xFFC8553D);
   static const Color cream = Color(0xFFFAF7F2);
   static const Color surface = Color(0xFFF0EBE3);
 
-  // ── Sign In button logic ──
+  // Sign In button logic
   void _onSignIn() {
-    // TODO: Replace this with your real login logic later.
-    // For now, we just print what the user typed.
-    String email = _emailController.text;
-    String password = _passwordController.text;
-
-    print('Email: $email');
-    print('Password: $password');
-
-    // Example: navigate to the Home screen after login
-    // Navigator.pushReplacement(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => const HomeScreen()),
-    // );
+    // TODO: Add real email/password validation here later.
+    // For now, pressing Sign In goes straight to the Home screen.
+    Navigator.pushReplacement(
+      context,
+      // pushReplacement so the user can't go Back to the login screen.
+      MaterialPageRoute(builder: (context) => const HomeScreen()),
+    );
   }
 
   @override
@@ -61,9 +52,9 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               const SizedBox(height: 80),
 
-              // ── Greeting ──
+              // Greeting
               const Text(
-                'Welcome back 👋',
+                'Welcome back',
                 style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.w900,
@@ -80,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
               const SizedBox(height: 40),
 
-              // ── Email Field ──
+              // Email Field
               const Text(
                 'Email',
                 style: TextStyle(
@@ -114,7 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
               const SizedBox(height: 20),
 
-              // ── Password Field ──
+              // Password Field
               const Text(
                 'Password',
                 style: TextStyle(
@@ -162,7 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
               const SizedBox(height: 10),
 
-              // ── Forgot Password ──
+              // Forgot Password
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
@@ -178,7 +169,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
               const SizedBox(height: 24),
 
-              // ── Sign In Button ──
+              // Sign In Button
               SizedBox(
                 width: double.infinity, // makes the button full width
                 height: 54,
@@ -200,7 +191,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
               const SizedBox(height: 28),
 
-              // ── Divider with "or" ──
+              // Divider with "or"
               const Row(
                 children: [
                   Expanded(child: Divider(color: Colors.grey)),
@@ -214,7 +205,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
               const SizedBox(height: 24),
 
-              // ── Social Login Buttons ──
+              // Social Login Buttons
               Row(
                 children: [
                   // Google Button
@@ -277,7 +268,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
               const SizedBox(height: 32),
 
-              // ── Sign Up Link ──
+              // Sign Up Link
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
