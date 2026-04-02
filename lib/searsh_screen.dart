@@ -163,6 +163,8 @@ List<Product> products = [
   Product(name: "Floral Dress", price: 49, image:"assets/images/20.jpg",rating:4.8,isNew: true),
   Product(name: "modern blouse", price: 36, image:"assets/images/image4.jpg",rating:4.8,isNew: false),
   Product(name: "skyblue blouse", price: 35, image:"assets/images/image5.jpg",rating:4.8,isNew: true),
+
+
 ];
 
 //Product Card

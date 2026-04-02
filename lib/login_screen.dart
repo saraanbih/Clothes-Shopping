@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-
-// ─────────────────────────────────────────────
-//  LoginScreen
-//  This screen lets the user enter their email
-//  and password to sign in.
-// ─────────────────────────────────────────────
+import 'home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,35 +9,25 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  // These controllers read whatever the user types
-  // inside each text field.
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  // This controls whether the password is hidden or visible.
   bool _passwordVisible = false;
 
-  // ── App Colors (defined once, used everywhere) ──
   static const Color navy = Color(0xFF1A1A2E);
   static const Color red = Color(0xFFC8553D);
   static const Color cream = Color(0xFFFAF7F2);
   static const Color surface = Color(0xFFF0EBE3);
 
-  // ── Sign In button logic ──
+  // Sign In button logic
   void _onSignIn() {
-    // TODO: Replace this with your real login logic later.
-    // For now, we just print what the user typed.
-    String email = _emailController.text;
-    String password = _passwordController.text;
+    // TODO: Add real email/password validation here later.
+    // For now, pressing Sign In goes straight to the Home screen.
+    Navigator.pushReplacement(
+      context,
 
-    print('Email: $email');
-    print('Password: $password');
-
-    // Example: navigate to the Home screen after login
-    // Navigator.pushReplacement(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => const HomeScreen()),
-    // );
+      MaterialPageRoute(builder: (context) => const HomeScreen()),
+    );
   }
 
   @override
@@ -50,8 +35,6 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       backgroundColor: cream,
 
-      // SingleChildScrollView lets the screen scroll
-      // if the keyboard pushes content up.
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 28),
@@ -61,9 +44,9 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               const SizedBox(height: 80),
 
-              // ── Greeting ──
+              // Greeting
               const Text(
-                'Welcome back 👋',
+                'Welcome back',
                 style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.w900,
@@ -80,7 +63,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
               const SizedBox(height: 40),
 
-              // ── Email Field ──
               const Text(
                 'Email',
                 style: TextStyle(
@@ -94,8 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
               TextField(
                 controller: _emailController,
-                keyboardType:
-                    TextInputType.emailAddress, // shows email keyboard
+                keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
                   hintText: 'you@email.com',
                   hintStyle: const TextStyle(color: Colors.grey),
@@ -114,7 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
               const SizedBox(height: 20),
 
-              // ── Password Field ──
+              // Password Field
               const Text(
                 'Password',
                 style: TextStyle(
@@ -147,7 +128,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       color: Colors.grey,
                     ),
                     onPressed: () {
-                      // setState() rebuilds the screen with the new value
                       setState(() {
                         _passwordVisible = !_passwordVisible;
                       });
@@ -162,7 +142,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
               const SizedBox(height: 10),
 
-              // ── Forgot Password ──
+              // Forgot Password
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
@@ -178,7 +158,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
               const SizedBox(height: 24),
 
-              // ── Sign In Button ──
+              // Sign In Button
               SizedBox(
                 width: double.infinity, // makes the button full width
                 height: 54,
@@ -200,7 +180,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
               const SizedBox(height: 28),
 
-              // ── Divider with "or" ──
+              // Divider with "or"
               const Row(
                 children: [
                   Expanded(child: Divider(color: Colors.grey)),
@@ -214,7 +194,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
               const SizedBox(height: 24),
 
-              // ── Social Login Buttons ──
+              // Social Login Buttons
               Row(
                 children: [
                   // Google Button
@@ -277,7 +257,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
               const SizedBox(height: 32),
 
-              // ── Sign Up Link ──
+              // Sign Up Link
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
