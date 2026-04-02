@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'home_screen.dart'; // import so we can navigate to it after login
-
-//  LoginScreen
+import 'home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -11,15 +9,11 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  // These controllers read whatever the user types
-  // inside each text field.
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  // This controls whether the password is hidden or visible.
   bool _passwordVisible = false;
 
-  // App Colors (defined once, used everywhere) ──
   static const Color navy = Color(0xFF1A1A2E);
   static const Color red = Color(0xFFC8553D);
   static const Color cream = Color(0xFFFAF7F2);
@@ -31,7 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
     // For now, pressing Sign In goes straight to the Home screen.
     Navigator.pushReplacement(
       context,
-      // pushReplacement so the user can't go Back to the login screen.
+
       MaterialPageRoute(builder: (context) => const HomeScreen()),
     );
   }
@@ -41,8 +35,6 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       backgroundColor: cream,
 
-      // SingleChildScrollView lets the screen scroll
-      // if the keyboard pushes content up.
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 28),
@@ -71,7 +63,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
               const SizedBox(height: 40),
 
-              // Email Field
               const Text(
                 'Email',
                 style: TextStyle(
@@ -85,8 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
               TextField(
                 controller: _emailController,
-                keyboardType:
-                    TextInputType.emailAddress, // shows email keyboard
+                keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
                   hintText: 'you@email.com',
                   hintStyle: const TextStyle(color: Colors.grey),
@@ -138,7 +128,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       color: Colors.grey,
                     ),
                     onPressed: () {
-                      // setState() rebuilds the screen with the new value
                       setState(() {
                         _passwordVisible = !_passwordVisible;
                       });

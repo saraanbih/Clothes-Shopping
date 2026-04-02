@@ -1,13 +1,5 @@
 import 'package:flutter/material.dart';
 
-//  HomeScreen
-//  The main screen after login. It shows:
-//   • A top bar with the logo and cart icon
-//   • A hero banner (sale/promotion)
-//   • Category chips (Women, Men, Kids…)
-//   • A grid of product cards with real images
-//   • A bottom navigation bar
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -16,19 +8,15 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // App Colors
   static const Color navy = Color(0xFF1A1A2E);
   static const Color red = Color(0xFFC8553D);
   static const Color cream = Color(0xFFFAF7F2);
   static const Color surface = Color(0xFFF0EBE3);
 
-  // Tracks which bottom nav tab is selected (0 = Home)
   int _selectedTab = 0;
 
-  // Tracks which category chip is selected
   String _selectedCategory = 'All';
 
-  // Category list
   final List<Map<String, dynamic>> _categories = [
     {'label': 'All', 'icon': Icons.grid_view_rounded},
     {'label': 'Women', 'icon': Icons.woman},
@@ -37,7 +25,6 @@ class _HomeScreenState extends State<HomeScreen> {
     {'label': 'Shoes', 'icon': Icons.roller_skating_outlined},
   ];
 
-  // Product list
   final List<Map<String, dynamic>> _products = [
     {
       'name': 'Floral Summer Dress',
@@ -83,9 +70,6 @@ class _HomeScreenState extends State<HomeScreen> {
     },
   ];
 
-  // Filtered products
-  // Returns only the products that match the selected category.
-  // If 'All' is selected, it returns everything.
   List<Map<String, dynamic>> get _filteredProducts {
     if (_selectedCategory == 'All') return _products;
     return _products.where((p) => p['category'] == _selectedCategory).toList();
@@ -102,8 +86,6 @@ class _HomeScreenState extends State<HomeScreen> {
             // Top Bar
             _buildTopBar(),
 
-            // Scrollable Content
-            // Expanded makes this take up all remaining space.
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
@@ -136,7 +118,6 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Left side: greeting + logo
           const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -153,7 +134,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
 
-          // Right side: search + cart icons
           Row(
             children: [
               _iconButton(
@@ -363,8 +343,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: GridView.builder(
-        // These two lines prevent GridView from scrolling on its own.
-        // The parent SingleChildScrollView handles all scrolling.
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
 
@@ -398,23 +376,18 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // ── Image Area ──
             Expanded(
               child: Stack(
-                // StackFit.expand makes every child fill the Stack's space
                 fit: StackFit.expand,
                 children: [
-                  // ── Product Image ──
                   ClipRRect(
-                    // ClipRRect rounds only the top two corners of the image
-                    // so it matches the card's rounded border.
                     borderRadius: const BorderRadius.vertical(
                       top: Radius.circular(18),
                     ),
                     child: Image.asset(
-                      product['image'], // path from the product Map above
-                      fit: BoxFit.cover, // fills the space, crops if needed
-                      // errorBuilder shows a placeholder if the image fails to load
+                      product['image'],
+                      fit: BoxFit.cover,
+
                       errorBuilder: (context, error, stackTrace) {
                         return Container(
                           color: surface,
@@ -430,7 +403,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
 
-                  // ── Favourite Heart Button (top-right corner) ──
                   Positioned(
                     top: 8,
                     right: 8,
@@ -529,7 +501,7 @@ class _HomeScreenState extends State<HomeScreen> {
         });
         // TODO: add navigation to other screens here later
       },
-      type: BottomNavigationBarType.fixed, // needed to show 4+ items correctly
+      type: BottomNavigationBarType.fixed,
       selectedItemColor: red,
       unselectedItemColor: Colors.grey,
       backgroundColor: Colors.white,
@@ -549,7 +521,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  //  HELPER: small square icon button
+  //  small square icon button
 
   Widget _iconButton(IconData icon, {required VoidCallback onTap}) {
     return GestureDetector(
