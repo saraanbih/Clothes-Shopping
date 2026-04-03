@@ -1,21 +1,5 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: ProductsPage(),
-    );
-  }
-}
-
 class ProductsPage extends StatelessWidget {
   const ProductsPage({super.key});
 
@@ -32,7 +16,10 @@ class ProductsPage extends StatelessWidget {
           "women Collection",
           style: TextStyle(color: Colors.black),
         ),
-        leading: const Icon(Icons.arrow_back, color: Colors.black),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
         actions: const [
           Padding(
             padding: EdgeInsets.only(right: 12),

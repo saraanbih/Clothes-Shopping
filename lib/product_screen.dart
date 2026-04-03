@@ -35,7 +35,7 @@ class _ProductScreenState extends State<ProductScreen> {
                 Positioned(
                   top: 50,
                   left: 20,
-                  child: _circleButton(Icons.arrow_back),
+                  child: _circleButton(Icons.arrow_back, onPressed: () => Navigator.pop(context)),
                 ),
 
                 Positioned(
@@ -222,14 +222,14 @@ class _ProductScreenState extends State<ProductScreen> {
     );
   }
 
-  Widget _circleButton(IconData icon) {
+  Widget _circleButton(IconData icon, {VoidCallback? onPressed}) {
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
         shape: BoxShape.circle,
       ),
       child: IconButton(
-        onPressed: () {},
+        onPressed: onPressed ?? () {},
         icon: Icon(icon),
       ),
     );

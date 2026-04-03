@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'searsh_screen.dart';
+import 'my_cart.dart';
+import 'product_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -139,7 +142,12 @@ class _HomeScreenState extends State<HomeScreen> {
               _iconButton(
                 Icons.search,
                 onTap: () {
-                  // TODO: navigate to Search screen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ProductsPage(),
+                    ),
+                  );
                 },
               ),
 
@@ -151,7 +159,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   _iconButton(
                     Icons.shopping_bag_outlined,
                     onTap: () {
-                      // TODO: navigate to Cart screen
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const CartScreen(),
+                        ),
+                      );
                     },
                   ),
                   Positioned(
@@ -366,7 +379,12 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildProductCard(Map<String, dynamic> product) {
     return GestureDetector(
       onTap: () {
-        // TODO: navigate to Product Detail screen
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const ProductScreen(),
+          ),
+        );
       },
       child: Container(
         decoration: BoxDecoration(
@@ -499,7 +517,14 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() {
           _selectedTab = index;
         });
-        // TODO: add navigation to other screens here later
+        if (index == 1) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const ProductsPage(),
+            ),
+          );
+        }
       },
       type: BottomNavigationBarType.fixed,
       selectedItemColor: red,

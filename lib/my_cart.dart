@@ -1,19 +1,4 @@
 import 'package:flutter/material.dart';
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: CartScreen(),
-    );
-  }
-}
 
 class CartScreen extends StatelessWidget {
   const CartScreen({super.key});
@@ -31,7 +16,10 @@ class CartScreen extends StatelessWidget {
           "My Cart",
           style: TextStyle(color: Colors.black),
         ),
-        leading: const Icon(Icons.arrow_back, color: Colors.black),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
         actions: const [
           Padding(
             padding: EdgeInsets.only(right: 12),
@@ -110,7 +98,7 @@ class CartScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(25),
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () => Navigator.pop(context),
                   child: const Text("Continue Shopping"),
                 ),
               ],
