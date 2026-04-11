@@ -1,21 +1,5 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: ProductsPage(),
-    );
-  }
-}
-
 class ProductsPage extends StatelessWidget {
   const ProductsPage({super.key});
 
@@ -32,7 +16,12 @@ class ProductsPage extends StatelessWidget {
           "women Collection",
           style: TextStyle(color: Colors.black),
         ),
-        leading: const Icon(Icons.arrow_back, color: Colors.black),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         actions: const [
           Padding(
             padding: EdgeInsets.only(right: 12),
@@ -126,9 +115,7 @@ class CategoryChip extends StatelessWidget {
       child: Chip(
         label: Text(text),
         backgroundColor: selected ? Colors.black : Colors.grey[200],
-        labelStyle: TextStyle(
-          color: selected ? Colors.white : Colors.black,
-        ),
+        labelStyle: TextStyle(color: selected ? Colors.white : Colors.black),
       ),
     );
   }
@@ -154,17 +141,50 @@ class Product {
   });
 }
 
-
 // Data
 List<Product> products = [
-  Product(name: "Floral Dress", price: 49, image:"assets/images/20.jpg",rating:4.8,isNew: true),
-  Product(name: "dior bag", price: 24, image:"assets/images/image2.jpg",rating:4.8,isNew: false ),
-  Product(name: "silver heels", price: 30, image:"assets/images/image3.jpg",rating:4.8,isNew: false),
-  Product(name: "Floral Dress", price: 49, image:"assets/images/20.jpg",rating:4.8,isNew: true),
-  Product(name: "modern blouse", price: 36, image:"assets/images/image4.jpg",rating:4.8,isNew: false),
-  Product(name: "skyblue blouse", price: 35, image:"assets/images/image5.jpg",rating:4.8,isNew: true),
-
-
+  Product(
+    name: "Floral Dress",
+    price: 49,
+    image: "assets/search_iscreen_mage/20.jpg",
+    rating: 4.8,
+    isNew: true,
+  ),
+  Product(
+    name: "dior bag",
+    price: 24,
+    image: "assets/search_iscreen_mage/image2.jpg",
+    rating: 4.8,
+    isNew: false,
+  ),
+  Product(
+    name: "silver heels",
+    price: 30,
+    image: "assets/search_iscreen_mage/image3.jpg",
+    rating: 4.8,
+    isNew: false,
+  ),
+  Product(
+    name: "Floral Dress",
+    price: 49,
+    image: "assets/search_iscreen_mage/20.jpg",
+    rating: 4.8,
+    isNew: true,
+  ),
+  Product(
+    name: "modern blouse",
+    price: 36,
+    image: "assets/search_iscreen_mage/image4.jpg",
+    rating: 4.8,
+    isNew: false,
+  ),
+  Product(
+    name: "skyblue blouse",
+    price: 35,
+    image: "assets/search_iscreen_mage/image5.jpg",
+    rating: 4.8,
+    isNew: true,
+  ),
 ];
 
 //Product Card
@@ -193,40 +213,39 @@ class _ProductCardState extends State<ProductCard> {
         children: [
           // Image + Favorite
           Expanded(
-  child: Stack(
-    children: [
-      
-      ClipRRect(
-        borderRadius: BorderRadius.circular(15),
-        child: SizedBox(
-          width: double.infinity,
-          height: double.infinity,
-          child: Image.asset(
-            product.image,
-            fit: BoxFit.cover,
-          ),
-        ),
-      ),
-      if (product.isNew)
-  Positioned(
-    top: 5,
-    left: 5,
-    child: Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-      decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 206, 57, 11),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: const Text(
-        "NEW",
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 10,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    ),
-  ),
+            child: Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: double.infinity,
+                    child: Image.asset(product.image, fit: BoxFit.cover),
+                  ),
+                ),
+                if (product.isNew)
+                  Positioned(
+                    top: 5,
+                    left: 5,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 3,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 206, 57, 11),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Text(
+                        "NEW",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
 
                 Positioned(
                   top: 5,
@@ -256,24 +275,22 @@ class _ProductCardState extends State<ProductCard> {
 
           const SizedBox(height: 8),
 
-         Text(
-  product.name,
-  style: const TextStyle(fontWeight: FontWeight.bold),
-),
+          Text(
+            product.name,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
 
-const SizedBox(height: 4),
+          const SizedBox(height: 4),
 
-Row(
-  children: List.generate(5, (index) {
-    return Icon(
-      index < product.rating.floor()
-          ? Icons.star
-          : Icons.star_border,
-      size: 14,
-      color: Colors.amber,
-    );
-  }),
-),
+          Row(
+            children: List.generate(5, (index) {
+              return Icon(
+                index < product.rating.floor() ? Icons.star : Icons.star_border,
+                size: 14,
+                color: Colors.amber,
+              );
+            }),
+          ),
 
           const SizedBox(height: 4),
 

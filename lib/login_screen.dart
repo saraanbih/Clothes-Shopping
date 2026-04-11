@@ -19,10 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
   static const Color cream = Color(0xFFFAF7F2);
   static const Color surface = Color(0xFFF0EBE3);
 
-  // Sign In button logic
   void _onSignIn() {
-    // TODO: Add real email/password validation here later.
-    // For now, pressing Sign In goes straight to the Home screen.
     Navigator.pushReplacement(
       context,
 
@@ -39,12 +36,10 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 28),
           child: Column(
-            crossAxisAlignment:
-                CrossAxisAlignment.start, // align text to the left
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 80),
 
-              // Greeting
               const Text(
                 'Welcome back',
                 style: TextStyle(
@@ -88,14 +83,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(14),
-                    borderSide: BorderSide.none, // no visible border line
+                    borderSide: BorderSide.none,
                   ),
                 ),
               ),
 
               const SizedBox(height: 20),
 
-              // Password Field
               const Text(
                 'Password',
                 style: TextStyle(
@@ -109,7 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
               TextField(
                 controller: _passwordController,
-                obscureText: !_passwordVisible, // hides or shows the password
+                obscureText: !_passwordVisible,
                 decoration: InputDecoration(
                   hintText: '••••••••',
                   hintStyle: const TextStyle(color: Colors.grey),
@@ -142,13 +136,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
               const SizedBox(height: 10),
 
-              // Forgot Password
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
-                  onPressed: () {
-                    // TODO: navigate to Forgot Password screen
-                  },
+                  onPressed: () {},
                   child: const Text(
                     'Forgot password?',
                     style: TextStyle(color: red),
@@ -158,9 +149,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
               const SizedBox(height: 24),
 
-              // Sign In Button
               SizedBox(
-                width: double.infinity, // makes the button full width
+                width: double.infinity,
                 height: 54,
                 child: ElevatedButton(
                   onPressed: _onSignIn,
@@ -180,7 +170,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
               const SizedBox(height: 28),
 
-              // Divider with "or"
               const Row(
                 children: [
                   Expanded(child: Divider(color: Colors.grey)),
@@ -194,15 +183,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
               const SizedBox(height: 24),
 
-              // Social Login Buttons
               Row(
                 children: [
                   // Google Button
                   Expanded(
                     child: OutlinedButton.icon(
-                      onPressed: () {
-                        // TODO: add Google sign-in
-                      },
+                      onPressed: () {},
                       icon: const Text(
                         'G',
                         style: TextStyle(
@@ -226,12 +212,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   const SizedBox(width: 12),
 
-                  // Facebook Button
                   Expanded(
                     child: OutlinedButton.icon(
-                      onPressed: () {
-                        // TODO: add Facebook sign-in
-                      },
+                      onPressed: () {},
                       icon: const Text(
                         'f',
                         style: TextStyle(
@@ -257,7 +240,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
               const SizedBox(height: 32),
 
-              // Sign Up Link
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -266,9 +248,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: TextStyle(color: Colors.grey),
                   ),
                   GestureDetector(
-                    onTap: () {
-                      // TODO: navigate to Sign Up screen
-                    },
+                    onTap: () {},
                     child: const Text(
                       'Sign Up',
                       style: TextStyle(color: red, fontWeight: FontWeight.w700),

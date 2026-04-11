@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'searsh_screen.dart';
+import 'my_cart.dart';
+import 'product_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -45,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
       'category': 'Women',
       'price': '\$58',
       'tag': '-15%',
-      'image': 'assets/home_screen_images/linen_wide_pants.jpg',
+      'image': 'assets/home_screen_images/wide_linen_pants.jpg',
     },
     {
       'name': 'Denim Jacket',
@@ -73,6 +76,10 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Map<String, dynamic>> get _filteredProducts {
     if (_selectedCategory == 'All') return _products;
     return _products.where((p) => p['category'] == _selectedCategory).toList();
+  }
+
+  void _goTo(Widget screen) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => screen));
   }
 
   @override
@@ -110,8 +117,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  //  TOP BAR
-
   Widget _buildTopBar() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
@@ -136,22 +141,22 @@ class _HomeScreenState extends State<HomeScreen> {
 
           Row(
             children: [
+              // Search icon → goes to SearchScreen
               _iconButton(
                 Icons.search,
                 onTap: () {
-                  // TODO: navigate to Search screen
+                  _goTo(const ProductsPage());
                 },
               ),
 
               const SizedBox(width: 8),
 
-              // Cart button with a red badge showing item count
               Stack(
                 children: [
                   _iconButton(
                     Icons.shopping_bag_outlined,
                     onTap: () {
-                      // TODO: navigate to Cart screen
+                      _goTo(const CartScreen());
                     },
                   ),
                   Positioned(
@@ -185,13 +190,9 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  //  HERO BANNER
-
   Widget _buildHeroBanner() {
     return GestureDetector(
-      onTap: () {
-        // TODO: navigate to the Sale / Listing screen
-      },
+      onTap: () => _goTo(const ProductsPage()),
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 20),
         padding: const EdgeInsets.all(20),
@@ -206,7 +207,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         child: Row(
           children: [
-            // Left: text content
             const Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -250,16 +250,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-
-            // Right: decorative icon
             const Icon(Icons.checkroom, size: 80, color: Colors.white12),
           ],
         ),
       ),
     );
   }
-
-  //  SECTION TITLE
 
   Widget _buildSectionTitle(String title) {
     return Padding(
@@ -275,8 +271,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  //  CATEGORY CHIPS
-
   Widget _buildCategoryChips() {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
@@ -284,7 +278,6 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Row(
         children: _categories.map((cat) {
           final bool isSelected = _selectedCategory == cat['label'];
-
           return GestureDetector(
             onTap: () {
               setState(() {
@@ -323,8 +316,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  //  PRODUCT GRID  (2 columns)
-
   Widget _buildProductGrid() {
     final products = _filteredProducts;
 
@@ -345,14 +336,12 @@ class _HomeScreenState extends State<HomeScreen> {
       child: GridView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, // 2 columns
-          crossAxisSpacing: 12, // gap between columns
-          mainAxisSpacing: 12, // gap between rows
-          childAspectRatio: 0.72, // card height vs width ratio
+          crossAxisCount: 2,
+          crossAxisSpacing: 12,
+          mainAxisSpacing: 12,
+          childAspectRatio: 0.72,
         ),
-
         itemCount: products.length,
         itemBuilder: (context, index) {
           return _buildProductCard(products[index]);
@@ -361,13 +350,10 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  //  SINGLE PRODUCT CARD
-
   Widget _buildProductCard(Map<String, dynamic> product) {
     return GestureDetector(
-      onTap: () {
-        // TODO: navigate to Product Detail screen
-      },
+      // Tapping a card → goes to ProductScreen
+      onTap: () => _goTo(const ProductScreen()),
       child: Container(
         decoration: BoxDecoration(
           color: surface,
@@ -407,9 +393,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     top: 8,
                     right: 8,
                     child: GestureDetector(
-                      onTap: () {
-                        // TODO: add to wishlist
-                      },
+                      onTap: () {},
                       child: Container(
                         width: 30,
                         height: 30,
@@ -426,8 +410,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
 
-                  // Tag Badge e.g. NEW / HOT / -15% (top-left corner)
-                  // The 'if' means this only appears when the tag is not empty
                   if (product['tag'] != '')
                     Positioned(
                       top: 8,
@@ -455,7 +437,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
 
-            // Product Name and Price
             Padding(
               padding: const EdgeInsets.all(10),
               child: Column(
@@ -469,8 +450,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: navy,
                     ),
                     maxLines: 1,
-                    overflow:
-                        TextOverflow.ellipsis, // "..." if name is too long
+                    overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 4),
                   Text(
@@ -490,16 +470,14 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  //  BOTTOM NAVIGATION BAR
-
   Widget _buildBottomNav() {
     return BottomNavigationBar(
       currentIndex: _selectedTab,
       onTap: (index) {
-        setState(() {
-          _selectedTab = index;
-        });
-        // TODO: add navigation to other screens here later
+        setState(() => _selectedTab = index);
+
+        if (index == 1) _goTo(const ProductsPage());
+        if (index == 3) _goTo(const CartScreen());
       },
       type: BottomNavigationBarType.fixed,
       selectedItemColor: red,
@@ -520,8 +498,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ],
     );
   }
-
-  //  small square icon button
 
   Widget _iconButton(IconData icon, {required VoidCallback onTap}) {
     return GestureDetector(

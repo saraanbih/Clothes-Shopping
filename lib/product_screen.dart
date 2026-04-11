@@ -13,12 +13,7 @@ class _ProductScreenState extends State<ProductScreen> {
   int quantity = 1;
 
   final sizes = ["XS", "S", "M", "L", "XL"];
-  final colors = [
-    Colors.red,
-    Colors.blueGrey,
-    Colors.green,
-    Colors.black,
-  ];
+  final colors = [Colors.red, Colors.blueGrey, Colors.green, Colors.black];
 
   @override
   Widget build(BuildContext context) {
@@ -45,8 +40,7 @@ class _ProductScreenState extends State<ProductScreen> {
                 ),
 
                 const Center(
-                  child: Icon(Icons.checkroom,
-                      size: 120, color: Colors.blue),
+                  child: Icon(Icons.checkroom, size: 120, color: Colors.blue),
                 ),
               ],
             ),
@@ -58,31 +52,34 @@ class _ProductScreenState extends State<ProductScreen> {
               padding: const EdgeInsets.all(20),
               decoration: const BoxDecoration(
                 color: Colors.white,
-                borderRadius:
-                    BorderRadius.vertical(top: Radius.circular(30)),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
-                    mainAxisAlignment:
-                        MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: const [
-                      Text("Floral Summer Dress",
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold)),
-                      Text("\$49",
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.red)),
+                      Text(
+                        "Floral Summer Dress",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        "\$49",
+                        style: TextStyle(fontSize: 20, color: Colors.red),
+                      ),
                     ],
                   ),
 
                   const SizedBox(height: 10),
 
-                  const Text("⭐⭐⭐⭐⭐ (128 reviews)",
-                      style: TextStyle(color: Colors.grey)),
+                  const Text(
+                    "⭐⭐⭐⭐⭐ (128 reviews)",
+                    style: TextStyle(color: Colors.grey),
+                  ),
 
                   const SizedBox(height: 10),
 
@@ -93,26 +90,25 @@ class _ProductScreenState extends State<ProductScreen> {
 
                   const SizedBox(height: 20),
 
-                  const Text("Select Size",
-                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  const Text(
+                    "Select Size",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
 
                   const SizedBox(height: 10),
 
                   Row(
                     children: List.generate(sizes.length, (index) {
                       return GestureDetector(
-                        onTap: () =>
-                            setState(() => selectedSize = index),
+                        onTap: () => setState(() => selectedSize = index),
                         child: Container(
-                          margin:
-                              const EdgeInsets.only(right: 10),
+                          margin: const EdgeInsets.only(right: 10),
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
                             color: selectedSize == index
                                 ? Colors.black
                                 : Colors.grey[300],
-                            borderRadius:
-                                BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(10),
                           ),
                           child: Text(
                             sizes[index],
@@ -129,26 +125,24 @@ class _ProductScreenState extends State<ProductScreen> {
 
                   const SizedBox(height: 20),
 
-                  const Text("Color",
-                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  const Text(
+                    "Color",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
 
                   const SizedBox(height: 10),
 
                   Row(
                     children: List.generate(colors.length, (index) {
                       return GestureDetector(
-                        onTap: () =>
-                            setState(() => selectedColor = index),
+                        onTap: () => setState(() => selectedColor = index),
                         child: Container(
-                          margin:
-                              const EdgeInsets.only(right: 10),
+                          margin: const EdgeInsets.only(right: 10),
                           padding: const EdgeInsets.all(4),
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: selectedColor == index
-                                ? Border.all(
-                                    width: 2,
-                                    color: Colors.black)
+                                ? Border.all(width: 2, color: Colors.black)
                                 : null,
                           ),
                           child: CircleAvatar(
@@ -165,12 +159,10 @@ class _ProductScreenState extends State<ProductScreen> {
                   Row(
                     children: [
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
                         decoration: BoxDecoration(
                           color: Colors.grey[300],
-                          borderRadius:
-                              BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                         child: Row(
                           children: [
@@ -199,12 +191,9 @@ class _ProductScreenState extends State<ProductScreen> {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.red,
-                            padding:
-                                const EdgeInsets.symmetric(
-                                    vertical: 15),
+                            padding: const EdgeInsets.symmetric(vertical: 15),
                             shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(20),
                             ),
                           ),
                           onPressed: () {},
@@ -228,10 +217,7 @@ class _ProductScreenState extends State<ProductScreen> {
         color: Colors.white,
         shape: BoxShape.circle,
       ),
-      child: IconButton(
-        onPressed: () {},
-        icon: Icon(icon),
-      ),
+      child: IconButton(onPressed: () {}, icon: Icon(icon)),
     );
   }
 }

@@ -1,19 +1,4 @@
 import 'package:flutter/material.dart';
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: CartScreen(),
-    );
-  }
-}
 
 class CartScreen extends StatelessWidget {
   const CartScreen({super.key});
@@ -27,11 +12,13 @@ class CartScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-        title: const Text(
-          "My Cart",
-          style: TextStyle(color: Colors.black),
+        title: const Text("My Cart", style: TextStyle(color: Colors.black)),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
-        leading: const Icon(Icons.arrow_back, color: Colors.black),
         actions: const [
           Padding(
             padding: EdgeInsets.only(right: 12),
@@ -52,21 +39,19 @@ class CartScreen extends StatelessWidget {
                   name: "Floral Dress",
                   price: 49,
                   color: Colors.red,
-                  images:"assets/images/20.jpg",
+                  images: "assets/search_iscreen_mage/20.jpg",
                 ),
                 CartItem(
                   name: "Dior Bag",
                   price: 24,
                   color: Colors.blue,
-                  images:"assets/images/image2.jpg",
-
+                  images: "assets/search_iscreen_mage/image2.jpg",
                 ),
                 CartItem(
                   name: "modern Blouse",
                   price: 36,
                   color: Colors.purple,
-                  images:"assets/images/image4.jpg",
-
+                  images: "assets/search_iscreen_mage/image4.jpg",
                 ),
               ],
             ),
@@ -115,7 +100,7 @@ class CartScreen extends StatelessWidget {
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
@@ -132,7 +117,9 @@ class CartScreen extends StatelessWidget {
             value,
             style: TextStyle(
               fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
-              color: isBold ? const Color.fromARGB(255, 230, 62, 20) : Colors.black,
+              color: isBold
+                  ? const Color.fromARGB(255, 230, 62, 20)
+                  : Colors.black,
             ),
           ),
         ],
@@ -146,7 +133,7 @@ class CartItem extends StatefulWidget {
   final String name;
   final double price;
   final Color color;
-  final String images ;
+  final String images;
 
   const CartItem({
     super.key,
@@ -154,7 +141,6 @@ class CartItem extends StatefulWidget {
     required this.price,
     required this.color,
     required this.images,
-
   });
 
   @override
@@ -178,17 +164,12 @@ class _CartItemState extends State<CartItem> {
           Container(
             width: 50,
             height: 50,
-            decoration: BoxDecoration(
-             borderRadius: BorderRadius.circular(10),
-  ),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
             child: ClipRRect(
-             borderRadius: BorderRadius.circular(10),
-             child: Image.asset(
-              widget.images,
-              fit: BoxFit.cover,
-    ),
-  ),
-),
+              borderRadius: BorderRadius.circular(10),
+              child: Image.asset(widget.images, fit: BoxFit.cover),
+            ),
+          ),
           const SizedBox(width: 10),
 
           Expanded(
@@ -222,7 +203,7 @@ class _CartItemState extends State<CartItem> {
                 setState(() => quantity++);
               }),
             ],
-          )
+          ),
         ],
       ),
     );
