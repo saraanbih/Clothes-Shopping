@@ -49,16 +49,6 @@ class _ProductScreenState extends State<ProductScreen> {
                     () => Navigator.popUntil(context, (route) => route.isFirst),
                   ),
                 ),
-
-                Positioned(
-                  top: 50,
-                  right: 20,
-                  child: _circleButton(Icons.favorite_border, () {}),
-                ),
-
-                const Center(
-                  child: Icon(Icons.checkroom, size: 120, color: Colors.blue),
-                ),
               ],
             ),
           ),
