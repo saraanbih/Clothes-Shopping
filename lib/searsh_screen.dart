@@ -167,7 +167,7 @@ List<Product> products = [
   Product(
     name: "Floral Dress",
     price: 49,
-    image: "assets/search_iscreen_mage/20.jpg",
+    image: 'assets/home_screen_images/floral_summer_dress.jpg',
     rating: 4.8,
     isNew: true,
   ),
