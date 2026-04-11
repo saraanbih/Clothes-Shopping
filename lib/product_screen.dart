@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class ProductScreen extends StatefulWidget {
-  const ProductScreen({super.key});
+  final Map<String, dynamic> product;
+
+  const ProductScreen({super.key, required this.product});
 
   @override
   State<ProductScreen> createState() => _ProductScreenState();
@@ -25,18 +27,33 @@ class _ProductScreenState extends State<ProductScreen> {
             flex: 5,
             child: Stack(
               children: [
-                Container(color: const Color(0xFFD2A88F)),
+                Container(
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFD2A88F),
+                    image: DecorationImage(
+                      image: AssetImage(widget.product['image']),
+                      fit: BoxFit.cover,
+                      colorFilter: ColorFilter.mode(
+                        Colors.black26,
+                        BlendMode.darken,
+                      ),
+                    ),
+                  ),
+                ),
 
                 Positioned(
                   top: 50,
                   left: 20,
-                  child: _circleButton(Icons.arrow_back),
+                  child: _circleButton(
+                    Icons.arrow_back,
+                    () => Navigator.popUntil(context, (route) => route.isFirst),
+                  ),
                 ),
 
                 Positioned(
                   top: 50,
                   right: 20,
-                  child: _circleButton(Icons.favorite_border),
+                  child: _circleButton(Icons.favorite_border, () {}),
                 ),
 
                 const Center(
@@ -59,17 +76,17 @@ class _ProductScreenState extends State<ProductScreen> {
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
+                    children: [
                       Text(
-                        "Floral Summer Dress",
-                        style: TextStyle(
+                        widget.product['name'] ?? 'Product',
+                        style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
-                        "\$49",
-                        style: TextStyle(fontSize: 20, color: Colors.red),
+                        widget.product['price'] ?? '',
+                        style: const TextStyle(fontSize: 20, color: Colors.red),
                       ),
                     ],
                   ),
@@ -83,9 +100,10 @@ class _ProductScreenState extends State<ProductScreen> {
 
                   const SizedBox(height: 10),
 
-                  const Text(
-                    "A light and breathable floral dress perfect for warm days.",
-                    style: TextStyle(color: Colors.grey),
+                  Text(
+                    widget.product['description'] ??
+                        'A light and breathable floral dress perfect for warm days.',
+                    style: const TextStyle(color: Colors.grey),
                   ),
 
                   const SizedBox(height: 20),
@@ -211,13 +229,13 @@ class _ProductScreenState extends State<ProductScreen> {
     );
   }
 
-  Widget _circleButton(IconData icon) {
+  Widget _circleButton(IconData icon, VoidCallback onTap) {
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
         shape: BoxShape.circle,
       ),
-      child: IconButton(onPressed: () {}, icon: Icon(icon)),
+      child: IconButton(onPressed: onTap, icon: Icon(icon)),
     );
   }
 }

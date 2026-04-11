@@ -353,7 +353,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildProductCard(Map<String, dynamic> product) {
     return GestureDetector(
       // Tapping a card → goes to ProductScreen
-      onTap: () => _goTo(const ProductScreen()),
+      onTap: () => _goTo(ProductScreen(product: product)),
       child: Container(
         decoration: BoxDecoration(
           color: surface,
