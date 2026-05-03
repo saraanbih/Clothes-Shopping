@@ -1,26 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'orderconfirmation_screen.dart';
 
-class CheckoutScreen extends StatelessWidget {
+class CheckoutScreen extends StatefulWidget {
   const CheckoutScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: const CheckoutPage(),
-    );
-  }
+  State<CheckoutScreen> createState() => _CheckoutPageState();
 }
 
-class CheckoutPage extends StatefulWidget {
-  const CheckoutPage({super.key});
-
-  @override
-  State<CheckoutPage> createState() => _CheckoutPageState();
-}
-
-class _CheckoutPageState extends State<CheckoutPage> {
+class _CheckoutPageState extends State<CheckoutScreen> {
   String _paymentMethod = 'card';
 
   final _nameController       = TextEditingController();
@@ -50,8 +39,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
       appBar: AppBar(
         backgroundColor: const Color(0xFFF5F0EB),
         elevation: 0,
-        leading: const Icon(Icons.arrow_back_ios_new,
-            color: Color(0xFF1A1A1A), size: 18),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new,
+              color: Color(0xFF1A1A1A), size: 18),
+          onPressed: () => Navigator.pop(context),
+        ),
         title: const Text(
           'Checkout',
           style: TextStyle(
@@ -142,7 +134,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     ),
                   ),
 
-                  // Card fields
                   if (_paymentMethod == 'card') ...[
                     const SizedBox(height: 10),
                     _buildField(
@@ -215,7 +206,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
             const SizedBox(height: 20),
 
-            // ─── Place Order button ───
+            // ─── Place Order ───
             SizedBox(
               width: double.infinity,
               height: 54,
@@ -244,7 +235,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
     );
   }
 
-  // ── helpers ──────────────────────────────────────────────
+  // ─── helpers ────────────────────────────────────────────
 
   Widget _buildCard({required Widget child}) {
     return Container(
@@ -301,10 +292,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
       style: const TextStyle(fontSize: 14, color: Color(0xFF1A1A1A)),
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: const TextStyle(
-          fontSize: 14,
-          color: Color(0xFFB0A99F),
-        ),
+        hintStyle: const TextStyle(fontSize: 14, color: Color(0xFFB0A99F)),
         filled: true,
         fillColor: const Color(0xFFF5F0EB),
         contentPadding:
@@ -349,63 +337,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
   }
 
   void _placeOrder() {
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 64,
-              height: 64,
-              decoration: const BoxDecoration(
-                color: Color(0xFFE8553E),
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(Icons.check, color: Colors.white, size: 32),
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'Order Placed!',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w800,
-                color: Color(0xFF1A1A1A),
-              ),
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              'Your order has been placed successfully.',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 13,
-                color: Color(0xFF888888),
-              ),
-            ),
-            const SizedBox(height: 20),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () => Navigator.pop(context),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFE8553E),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: const Text(
-                  'Done',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const OrderConfirmationScreen(),
       ),
     );
   }
