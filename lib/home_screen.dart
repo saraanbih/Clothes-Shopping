@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'searsh_screen.dart';
 import 'my_cart.dart';
 import 'product_screen.dart';
+import 'profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -477,7 +478,7 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() => _selectedTab = index);
 
         if (index == 1) _goTo(const ProductsPage());
-        if (index == 3) _goTo(const CartScreen());
+        if (index == 3) _goTo(const ProfileScreen());
       },
       type: BottomNavigationBarType.fixed,
       selectedItemColor: red,
