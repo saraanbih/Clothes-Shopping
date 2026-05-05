@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'models/product_model.dart';
+import 'providers/shop_provider.dart';
 
 class ProductScreen extends StatefulWidget {
-  final Map<String, dynamic> product;
+  final ProductModel product;
 
   const ProductScreen({super.key, required this.product});
 
@@ -10,12 +13,13 @@ class ProductScreen extends StatefulWidget {
 }
 
 class _ProductScreenState extends State<ProductScreen> {
-  int selectedSize = 1;
+  int selectedSize = 2;
   int selectedColor = 0;
   int quantity = 1;
 
-  final sizes = ["XS", "S", "M", "L", "XL"];
+  final sizes = ['XS', 'S', 'M', 'L', 'XL'];
   final colors = [Colors.red, Colors.blueGrey, Colors.green, Colors.black];
+  final colorNames = ['Red', 'Grey', 'Green', 'Black'];
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +35,7 @@ class _ProductScreenState extends State<ProductScreen> {
                   decoration: BoxDecoration(
                     color: const Color(0xFFD2A88F),
                     image: DecorationImage(
-                      image: AssetImage(widget.product['image']),
+                      image: AssetImage(widget.product.imageUrl),
                       fit: BoxFit.cover,
                       colorFilter: ColorFilter.mode(
                         Colors.black26,
@@ -40,19 +44,17 @@ class _ProductScreenState extends State<ProductScreen> {
                     ),
                   ),
                 ),
-
                 Positioned(
                   top: 50,
                   left: 20,
                   child: _circleButton(
                     Icons.arrow_back,
-                    () => Navigator.popUntil(context, (route) => route.isFirst),
+                    () => Navigator.pop(context),
                   ),
                 ),
               ],
             ),
           ),
-
           Expanded(
             flex: 7,
             child: Container(
@@ -67,44 +69,48 @@ class _ProductScreenState extends State<ProductScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        widget.product['name'] ?? 'Product',
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                      Expanded(
+                        child: Text(
+                          widget.product.name,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                       Text(
-                        widget.product['price'] ?? '',
+                        '\$${widget.product.price.toStringAsFixed(0)}',
                         style: const TextStyle(fontSize: 20, color: Colors.red),
                       ),
                     ],
                   ),
-
                   const SizedBox(height: 10),
-
-                  const Text(
-                    "⭐⭐⭐⭐⭐ (128 reviews)",
-                    style: TextStyle(color: Colors.grey),
+                  Row(
+                    children: [
+                      Icon(Icons.star, color: Colors.amber[700], size: 18),
+                      const SizedBox(width: 6),
+                      Text(
+                        widget.product.rating.toStringAsFixed(1),
+                        style: const TextStyle(color: Colors.grey),
+                      ),
+                      const SizedBox(width: 8),
+                      const Text(
+                        '(128 reviews)',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ],
                   ),
-
                   const SizedBox(height: 10),
-
                   Text(
-                    widget.product['description'] ??
-                        'A light and breathable floral dress perfect for warm days.',
+                    widget.product.description,
                     style: const TextStyle(color: Colors.grey),
                   ),
-
                   const SizedBox(height: 20),
-
                   const Text(
-                    "Select Size",
+                    'Select Size',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-
                   const SizedBox(height: 10),
-
                   Row(
                     children: List.generate(sizes.length, (index) {
                       return GestureDetector(
@@ -130,16 +136,12 @@ class _ProductScreenState extends State<ProductScreen> {
                       );
                     }),
                   ),
-
                   const SizedBox(height: 20),
-
                   const Text(
-                    "Color",
+                    'Color',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-
                   const SizedBox(height: 10),
-
                   Row(
                     children: List.generate(colors.length, (index) {
                       return GestureDetector(
@@ -161,9 +163,7 @@ class _ProductScreenState extends State<ProductScreen> {
                       );
                     }),
                   ),
-
                   const Spacer(),
-
                   Row(
                     children: [
                       Container(
@@ -182,7 +182,7 @@ class _ProductScreenState extends State<ProductScreen> {
                               },
                               icon: const Icon(Icons.remove),
                             ),
-                            Text("$quantity"),
+                            Text('$quantity'),
                             IconButton(
                               onPressed: () {
                                 setState(() => quantity++);
@@ -192,9 +192,7 @@ class _ProductScreenState extends State<ProductScreen> {
                           ],
                         ),
                       ),
-
                       const SizedBox(width: 20),
-
                       Expanded(
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
@@ -204,8 +202,18 @@ class _ProductScreenState extends State<ProductScreen> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                           ),
-                          onPressed: () {},
-                          child: const Text("Add to Cart"),
+                          onPressed: () {
+                            context.read<ShopProvider>().addToCart(
+                              widget.product,
+                              quantity: quantity,
+                              size: sizes[selectedSize],
+                              color: colorNames[selectedColor],
+                            );
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Added to cart!')),
+                            );
+                          },
+                          child: const Text('Add to Cart'),
                         ),
                       ),
                     ],

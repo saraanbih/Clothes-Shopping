@@ -1,63 +1,61 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'orderconfirmation_screen.dart';
+import 'providers/shop_provider.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.watch<ShopProvider>();
+    final cartItems = provider.cartItems;
+    final total = cartItems.fold<double>(
+      0,
+      (previousValue, item) => previousValue + item.totalPrice,
+    );
+
     return Scaffold(
       backgroundColor: const Color(0xffF5F5F5),
-
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-        title: const Text("My Cart", style: TextStyle(color: Colors.black)),
+        title: const Text('My Cart', style: TextStyle(color: Colors.black)),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () => Navigator.pop(context),
+          color: Colors.black,
         ),
-        actions: const [
-          Padding(
-            padding: EdgeInsets.only(right: 12),
-            child: Center(
-              child: Text("Clear", style: TextStyle(color: Colors.grey)),
-            ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              for (final item in cartItems) {
+                provider.removeCartItem(item.id);
+              }
+            },
+            child: const Text('Clear', style: TextStyle(color: Colors.grey)),
           ),
         ],
       ),
-
       body: Column(
         children: [
           Expanded(
-            child: ListView(
-              padding: const EdgeInsets.all(16),
-              children: const [
-                CartItem(
-                  name: "Floral Dress",
-                  price: 49,
-                  color: Colors.red,
-                  images: "assets/search_iscreen_mage/20.jpg",
-                ),
-                CartItem(
-                  name: "Dior Bag",
-                  price: 24,
-                  color: Colors.blue,
-                  images: "assets/search_iscreen_mage/image2.jpg",
-                ),
-                CartItem(
-                  name: "modern Blouse",
-                  price: 36,
-                  color: Colors.purple,
-                  images: "assets/search_iscreen_mage/image4.jpg",
-                ),
-              ],
-            ),
+            child: cartItems.isEmpty
+                ? const Center(
+                    child: Text(
+                      'Your cart is empty.',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  )
+                : ListView.builder(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: cartItems.length,
+                    itemBuilder: (context, index) {
+                      return CartItemCard(item: cartItems[index]);
+                    },
+                  ),
           ),
-
-          // Summary
           Container(
             padding: const EdgeInsets.all(16),
             decoration: const BoxDecoration(
@@ -66,14 +64,12 @@ class CartScreen extends StatelessWidget {
             ),
             child: Column(
               children: [
-                _row("Subtotal", "\$133"),
-                _row("Shipping", "Free"),
-                _row("Discount", "- \$24"),
+                _row('Subtotal', '\$${total.toStringAsFixed(0)}'),
+                _row('Shipping', 'Free'),
+                _row('Discount', '- \$0'),
                 const Divider(),
-                _row("Total", "\$109", isBold: true),
-
+                _row('Total', '\$${total.toStringAsFixed(0)}', isBold: true),
                 const SizedBox(height: 15),
-
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromARGB(255, 230, 62, 20),
@@ -82,12 +78,24 @@ class CartScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(25),
                     ),
                   ),
-                  onPressed: () {},
-                  child: const Text("Proceed to Checkout →"),
+                  onPressed: cartItems.isEmpty
+                      ? null
+                      : () async {
+                          await provider.placeOrder(
+                            '123 Main Street, Cairo, Egypt',
+                          );
+                          if (context.mounted) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const OrderConfirmationScreen(),
+                              ),
+                            );
+                          }
+                        },
+                  child: const Text('Proceed to Checkout →'),
                 ),
-
                 const SizedBox(height: 10),
-
                 OutlinedButton(
                   style: OutlinedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 50),
@@ -95,8 +103,8 @@ class CartScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(25),
                     ),
                   ),
-                  onPressed: () {},
-                  child: const Text("Continue Shopping"),
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Continue Shopping'),
                 ),
               ],
             ),
@@ -128,30 +136,14 @@ class CartScreen extends StatelessWidget {
   }
 }
 
-//  Cart Item
-class CartItem extends StatefulWidget {
-  final String name;
-  final double price;
-  final Color color;
-  final String images;
+class CartItemCard extends StatelessWidget {
+  final dynamic item;
 
-  const CartItem({
-    super.key,
-    required this.name,
-    required this.price,
-    required this.color,
-    required this.images,
-  });
-
-  @override
-  State<CartItem> createState() => _CartItemState();
-}
-
-class _CartItemState extends State<CartItem> {
-  int quantity = 1;
+  const CartItemCard({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.read<ShopProvider>();
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(12),
@@ -162,45 +154,52 @@ class _CartItemState extends State<CartItem> {
       child: Row(
         children: [
           Container(
-            width: 50,
-            height: 50,
+            width: 70,
+            height: 70,
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: Image.asset(widget.images, fit: BoxFit.cover),
+              child: Image.asset(item.product.imageUrl, fit: BoxFit.cover),
             ),
           ),
           const SizedBox(width: 10),
-
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(widget.name),
+                Text(
+                  item.product.name,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
                 const SizedBox(height: 4),
                 Text(
-                  "\$${widget.price}",
+                  '\$${item.product.price.toStringAsFixed(0)}',
                   style: const TextStyle(color: Colors.red),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  'Size: ${item.size} • ${item.color}',
+                  style: const TextStyle(color: Colors.grey),
                 ),
               ],
             ),
           ),
-
           Row(
             children: [
-              _btn("-", () {
-                if (quantity > 1) {
-                  setState(() => quantity--);
+              _btn('-', () {
+                final nextQuantity = item.quantity - 1;
+                if (nextQuantity <= 0) {
+                  provider.removeCartItem(item.id);
+                } else {
+                  provider.updateCartQuantity(item.id, nextQuantity);
                 }
               }),
-
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Text(quantity.toString()),
+                child: Text(item.quantity.toString()),
               ),
-
-              _btn("+", () {
-                setState(() => quantity++);
+              _btn('+', () {
+                provider.updateCartQuantity(item.id, item.quantity + 1);
               }),
             ],
           ),

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'models/product_model.dart';
+import 'providers/shop_provider.dart';
 import 'searsh_screen.dart';
 import 'my_cart.dart';
 import 'product_screen.dart';
 import 'profile_screen.dart';
+import 'wishlist_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,7 +22,6 @@ class _HomeScreenState extends State<HomeScreen> {
   static const Color surface = Color(0xFFF0EBE3);
 
   int _selectedTab = 0;
-
   String _selectedCategory = 'All';
 
   final List<Map<String, dynamic>> _categories = [
@@ -29,71 +32,25 @@ class _HomeScreenState extends State<HomeScreen> {
     {'label': 'Shoes', 'icon': Icons.roller_skating_outlined},
   ];
 
-  final List<Map<String, dynamic>> _products = [
-    {
-      'name': 'Floral Summer Dress',
-      'category': 'Women',
-      'price': '\$49',
-      'tag': 'NEW',
-      'image': 'assets/home_screen_images/floral_summer_dress.jpg',
-    },
-    {
-      'name': 'Classic White Tee',
-      'category': 'Men',
-      'price': '\$24',
-      'tag': '',
-      'image': 'assets/home_screen_images/classic_white_tee.jpg',
-    },
-    {
-      'name': 'Wide Linen Pants',
-      'category': 'Women',
-      'price': '\$58',
-      'tag': '-15%',
-      'image': 'assets/home_screen_images/wide_linen_pants.jpg',
-    },
-    {
-      'name': 'Denim Jacket',
-      'category': 'Men',
-      'price': '\$89',
-      'tag': 'HOT',
-      'image': 'assets/home_screen_images/denim_jacket.jpg',
-    },
-    {
-      'name': 'Kids Dino Tee',
-      'category': 'Kids',
-      'price': '\$18',
-      'tag': '',
-      'image': 'assets/home_screen_images/kids_dino_tee.jpg',
-    },
-    {
-      'name': 'Knit Blouse',
-      'category': 'Women',
-      'price': '\$36',
-      'tag': 'NEW',
-      'image': 'assets/home_screen_images/knit_blouse.jpg',
-    },
-  ];
-
-  List<Map<String, dynamic>> get _filteredProducts {
-    if (_selectedCategory == 'All') return _products;
-    return _products.where((p) => p['category'] == _selectedCategory).toList();
-  }
-
   void _goTo(Widget screen) {
     Navigator.push(context, MaterialPageRoute(builder: (context) => screen));
   }
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.watch<ShopProvider>();
+    final filteredProducts = _selectedCategory == 'All'
+        ? provider.products
+        : provider.products
+              .where((product) => product.category == _selectedCategory)
+              .toList();
+
     return Scaffold(
       backgroundColor: cream,
-
       body: SafeArea(
         child: Column(
           children: [
-            // Top Bar
-            _buildTopBar(),
-
+            _buildTopBar(provider.cartCount),
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
@@ -103,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     _buildSectionTitle('Shop by Category'),
                     _buildCategoryChips(),
                     _buildSectionTitle('Featured Items'),
-                    _buildProductGrid(),
+                    _buildProductGrid(filteredProducts),
                     const SizedBox(height: 20),
                   ],
                 ),
@@ -112,13 +69,11 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-
-      // Bottom Navigation Bar
       bottomNavigationBar: _buildBottomNav(),
     );
   }
 
-  Widget _buildTopBar() {
+  Widget _buildTopBar(int cartCount) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       child: Row(
@@ -139,49 +94,42 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
           ),
-
           Row(
             children: [
-              // Search icon → goes to SearchScreen
               _iconButton(
                 Icons.search,
-                onTap: () {
-                  _goTo(const ProductsPage());
-                },
+                onTap: () => _goTo(const ProductsPage()),
               ),
-
               const SizedBox(width: 8),
-
               Stack(
                 children: [
                   _iconButton(
                     Icons.shopping_bag_outlined,
-                    onTap: () {
-                      _goTo(const CartScreen());
-                    },
+                    onTap: () => _goTo(const CartScreen()),
                   ),
-                  Positioned(
-                    top: 0,
-                    right: 0,
-                    child: Container(
-                      width: 16,
-                      height: 16,
-                      decoration: const BoxDecoration(
-                        color: red,
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Center(
-                        child: Text(
-                          '3',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 9,
-                            fontWeight: FontWeight.w700,
+                  if (cartCount > 0)
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      child: Container(
+                        width: 16,
+                        height: 16,
+                        decoration: const BoxDecoration(
+                          color: red,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Center(
+                          child: Text(
+                            '$cartCount',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 9,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
                 ],
               ),
             ],
@@ -317,9 +265,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildProductGrid() {
-    final products = _filteredProducts;
-
+  Widget _buildProductGrid(List<ProductModel> products) {
     if (products.isEmpty) {
       return const Padding(
         padding: EdgeInsets.all(40),
@@ -351,9 +297,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildProductCard(Map<String, dynamic> product) {
+  Widget _buildProductCard(ProductModel product) {
     return GestureDetector(
-      // Tapping a card → goes to ProductScreen
       onTap: () => _goTo(ProductScreen(product: product)),
       child: Container(
         decoration: BoxDecoration(
@@ -372,9 +317,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       top: Radius.circular(18),
                     ),
                     child: Image.asset(
-                      product['image'],
+                      product.imageUrl,
                       fit: BoxFit.cover,
-
                       errorBuilder: (context, error, stackTrace) {
                         return Container(
                           color: surface,
@@ -389,12 +333,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                     ),
                   ),
-
                   Positioned(
                     top: 8,
                     right: 8,
                     child: GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        context.read<ShopProvider>().toggleWishlist(product);
+                      },
                       child: Container(
                         width: 30,
                         height: 30,
@@ -402,16 +347,19 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: Colors.white,
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(
-                          Icons.favorite_border,
+                        child: Icon(
+                          context.watch<ShopProvider>().wishlist.any(
+                                (item) => item.id == product.id,
+                              )
+                              ? Icons.favorite
+                              : Icons.favorite_border,
                           size: 16,
-                          color: Colors.grey,
+                          color: Colors.red,
                         ),
                       ),
                     ),
                   ),
-
-                  if (product['tag'] != '')
+                  if (product.tag.isNotEmpty)
                     Positioned(
                       top: 8,
                       left: 8,
@@ -425,7 +373,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
-                          product['tag'],
+                          product.tag,
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 10,
@@ -437,14 +385,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-
             Padding(
               padding: const EdgeInsets.all(10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    product['name'],
+                    product.name,
                     style: const TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
@@ -455,7 +402,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    product['price'],
+                    '\$${product.price.toStringAsFixed(0)}',
                     style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w800,
@@ -476,8 +423,8 @@ class _HomeScreenState extends State<HomeScreen> {
       currentIndex: _selectedTab,
       onTap: (index) {
         setState(() => _selectedTab = index);
-
         if (index == 1) _goTo(const ProductsPage());
+        if (index == 2) _goTo(const WishlistScreen());
         if (index == 3) _goTo(const ProfileScreen());
       },
       type: BottomNavigationBarType.fixed,

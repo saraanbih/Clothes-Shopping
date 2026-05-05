@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
-import 'splash_screen.dart';
+import 'package:provider/provider.dart';
+import 'providers/shop_provider.dart';
+import 'screens/app_entry.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // Firebase initialization is handled in FirebaseService
+  // to avoid double initialization and ensure proper error handling
   runApp(const MyApp());
 }
 
@@ -10,16 +15,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Drape',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFC8553D)),
-        useMaterial3: true,
+    return ChangeNotifierProvider(
+      create: (_) => ShopProvider(),
+      child: MaterialApp(
+        title: 'Drape',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFC8553D)),
+          useMaterial3: true,
+        ),
+        home: const AppEntry(),
       ),
-
-      // if u wanna test product screen, just change the home to ProductScreen and import it at the top
-      home: const SplashScreen(),
     );
   }
 }

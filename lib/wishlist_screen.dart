@@ -1,86 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'models/product_model.dart';
+import 'providers/shop_provider.dart';
 
-// ─── Wishlist Item Model ───────────────────────────────────
-class WishlistItem {
-  final String id;
-  final String name;
-  final String category;
-  final String subcategory;
-  final double price;
-  final String imagePlaceholder;
-
-  const WishlistItem({
-    required this.id,
-    required this.name,
-    required this.category,
-    required this.subcategory,
-    required this.price,
-    required this.imagePlaceholder,
-  });
-}
-
-// ─── Sample Data ──────────────────────────────────────────
-final List<WishlistItem> wishlistItems = [
-  WishlistItem(
-    id: '1',
-    name: 'Floral Summer Dress',
-    category: 'Women',
-    subcategory: 'Dress',
-    price: 49,
-    imagePlaceholder: 'assets/images/20.jpg',
-  ),
-  WishlistItem(
-    id: '2',
-    name: 'dior bag',
-    category: 'bags',
-    subcategory: 'bags',
-    price: 89,
-    imagePlaceholder: 'assets/images/image2.png', 
-  ),
-  WishlistItem(
-    id: '3',
-    name: 'heels',
-    category: 'hells',
-    subcategory: 'Top',
-    price: 18,
-    imagePlaceholder: 'assets/images/image3.jpg',
-  ),
-];
-
-// ─── Wishlist Screen ──────────────────────────────────────
-class WishlistScreen extends StatefulWidget {
+class WishlistScreen extends StatelessWidget {
   const WishlistScreen({super.key});
 
   @override
-  State<WishlistScreen> createState() => _WishlistScreenState();
-}
-
-class _WishlistScreenState extends State<WishlistScreen> {
-  final List<WishlistItem> _items = List.from(wishlistItems);
-
-  void _addToCart(WishlistItem item) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('${item.name} added to cart!'),
-        backgroundColor: const Color(0xFFE8553E),
-        behavior: SnackBarBehavior.floating,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        duration: const Duration(seconds: 1),
-      ),
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final provider = context.watch<ShopProvider>();
+    final wishlist = provider.wishlist;
+
     return Scaffold(
       backgroundColor: const Color(0xFFFAF7F4),
       appBar: AppBar(
         backgroundColor: const Color(0xFFFAF7F4),
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new,
-              color: Color(0xFF1A1A1A), size: 18),
+          icon: const Icon(
+            Icons.arrow_back_ios_new,
+            color: Color(0xFF1A1A1A),
+            size: 18,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         title: Row(
@@ -95,8 +36,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
               ),
             ),
             SizedBox(width: 4),
-            Icon(Icons.favorite_border,
-                color: Color(0xFF1A1A1A), size: 18),
+            Icon(Icons.favorite_border, color: Color(0xFF1A1A1A), size: 18),
           ],
         ),
         centerTitle: true,
@@ -104,44 +44,47 @@ class _WishlistScreenState extends State<WishlistScreen> {
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 20),
         children: [
-          ..._items.map((item) => Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: _WishlistCard(
-                  item: item,
-                  onAddToCart: () => _addToCart(item),
+          if (wishlist.isEmpty)
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 48),
+              child: Center(
+                child: Text(
+                  'Your wishlist is empty.',
+                  style: TextStyle(color: Colors.grey),
                 ),
-              )),
-          _BrowseMoreCard(
-            onBrowse: () => Navigator.pop(context),
+              ),
+            ),
+          ...wishlist.map(
+            (item) => Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: _WishlistCard(item: item),
+            ),
           ),
+          _BrowseMoreCard(onBrowse: () => Navigator.pop(context)),
         ],
       ),
     );
   }
 }
 
-// ─── Wishlist Card ────────────────────────────────────────
 class _WishlistCard extends StatelessWidget {
-  final WishlistItem item;
-  final VoidCallback onAddToCart;
+  final ProductModel item;
 
-  const _WishlistCard({
-    required this.item,
-    required this.onAddToCart,
-  });
+  const _WishlistCard({required this.item});
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.read<ShopProvider>();
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
-          BoxShadow(
-            color: Colors.black.withBlue(1),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
+          const BoxShadow(
+            color: Color.fromRGBO(0, 0, 0, 0.05),
+            blurRadius: 10,
+            offset: Offset(0, 2),
           ),
         ],
       ),
@@ -149,7 +92,24 @@ class _WishlistCard extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: _buildImage(item),
+            child: Image.asset(
+              item.imageUrl,
+              width: 70,
+              height: 70,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  width: 70,
+                  height: 70,
+                  color: const Color(0xFFF0EBE6),
+                  child: const Icon(
+                    Icons.image_outlined,
+                    color: Color(0xFFCCBBAA),
+                    size: 30,
+                  ),
+                );
+              },
+            ),
           ),
           const SizedBox(width: 14),
           Expanded(
@@ -166,7 +126,7 @@ class _WishlistCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 3),
                 Text(
-                  '${item.category} · ${item.subcategory}',
+                  item.category,
                   style: const TextStyle(
                     fontSize: 12,
                     color: Color(0xFF999999),
@@ -184,13 +144,27 @@ class _WishlistCard extends StatelessWidget {
               ],
             ),
           ),
+          IconButton(
+            onPressed: () {
+              provider.toggleWishlist(item);
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Removed from wishlist')),
+              );
+            },
+            icon: const Icon(Icons.favorite, color: Color(0xFFE8553E)),
+            tooltip: 'Remove from wishlist',
+          ),
           ElevatedButton(
-            onPressed: onAddToCart,
+            onPressed: () {
+              provider.addToCart(item);
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(const SnackBar(content: Text('Added to cart!')));
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFFE8553E),
               foregroundColor: Colors.white,
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -207,30 +181,8 @@ class _WishlistCard extends StatelessWidget {
       ),
     );
   }
-
-  Widget _buildImage(WishlistItem item) {
-    return Image.asset(
-      item.imagePlaceholder,
-      width: 70,
-      height: 70,
-      fit: BoxFit.cover,
-      errorBuilder: (context, error, stackTrace) {
-        return Container(
-          width: 70,
-          height: 70,
-          color: const Color(0xFFF0EBE6),
-          child: const Icon(
-            Icons.image_outlined,
-            color: Color(0xFFCCBBAA),
-            size: 30,
-          ),
-        );
-      },
-    );
-  }
 }
 
-// ─── Browse More Card ─────────────────────────────────────
 class _BrowseMoreCard extends StatelessWidget {
   final VoidCallback onBrowse;
 
@@ -243,10 +195,7 @@ class _BrowseMoreCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: const Color(0xFFE8E0D8),
-          width: 1,
-        ),
+        border: Border.all(color: const Color(0xFFE8E0D8), width: 1),
       ),
       child: Column(
         children: [
@@ -259,23 +208,19 @@ class _BrowseMoreCard extends StatelessWidget {
             ),
             child: const Icon(Icons.add, color: Color(0xFF888888), size: 22),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
           const Text(
-            'Keep browsing to save more',
-            style: TextStyle(fontSize: 13, color: Color(0xFF888888)),
+            'Browse more styles',
+            style: TextStyle(fontWeight: FontWeight.w700),
           ),
           const SizedBox(height: 6),
-          GestureDetector(
-            onTap: onBrowse,
-            child: const Text(
-              'Browse Collection →',
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFFE8553E),
-              ),
-            ),
+          const Text(
+            'Explore our collection and save your favorite looks.',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Color(0xFF999999)),
           ),
+          const SizedBox(height: 16),
+          TextButton(onPressed: onBrowse, child: const Text('Browse Now')),
         ],
       ),
     );
